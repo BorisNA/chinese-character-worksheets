@@ -41,6 +41,7 @@ $(document).ready(function(){
 			var writePinyin = $("#write-pinyin")		.is(':checked');
 			var useGridlines = $("#use-gridlines")		.is(':checked');
 			var writeName = $("#write-name")			.is(':checked');
+			var tianyingzhangFont = $("#use-tianyingzhang")			.is(':checked');
 			var filename = $("#doc-filename").val() == "" ? docTitle : $("#doc-filename").val();
 			var wayOfRetrieval = $('input[name=way-of-retr]:checked').val();
 		// fetch all "character stroke order picture urls"
@@ -81,11 +82,11 @@ $(document).ready(function(){
 							getPinyin(charactersString, function(r){
 								charPinyin = r.split(" "); // save pinyin
 								// create the pdf now
-								createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, groupBy);
+								createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, tianyingzhangFont, groupBy);
 							});
 						} else {
 							// create the pdf now
-							createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, groupBy);
+							createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, tianyingzhangFont, groupBy);
 						}
 					}
 				}

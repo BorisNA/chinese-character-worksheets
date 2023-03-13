@@ -4,9 +4,10 @@
 *	numberOfGrayscaleSigns : int
 *	writePinyin, useGridlines, writeName : Booleans
 *	docTitle, filename, wayOfRetrieval : Strings
+*	tianyingzhangFont: Boolean
 *	groupBy: int
 */
-function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, groupBy ){
+function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, tianyingzhangFont, groupBy ){
 	// make filename "filesystem-secure"
 		filename = filename.replace(/[^a-z0-9öäüß\s\-\_\u4E00-\u9FFF]/gi, '');
 		filename = filename == "" ? "my-chinese-exercise" : filename;
@@ -18,6 +19,8 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 		$("#substatus").html("Adding Chinese font");
 		doc.addFileToVFS('AR PL UKai CN.ttf', ArPlUkaiCnBase64);
 		doc.addFont('AR PL UKai CN.ttf', 'AR PL UKai CN', 'normal');
+		doc.addFileToVFS('tianyingzhang.ttf', tianyingzhangBase64);
+		doc.addFont('tianyingzhang.ttf', 'tianyingzhang', 'normal');
 		$("#substatus").html("Adding Pīnyīn font");
 		doc.addFileToVFS('NotoSans-Regular.ttf', pinyinFontBase64);
 		doc.addFont('NotoSans-Regular.ttf', 'Noto Sans', 'normal');
@@ -107,6 +110,9 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 					doc.text(charPinyin[i], xUpLeft, thisLineYUpLeft-1.5); // "-1.5" looks better
 				}
 			// single characters along the character line
+			if( tianyingzhangFont )
+				doc.setFont('tianyingzhang');
+			else
 			doc.setFont('AR PL UKai CN');
 			doc.setFontSize(40); //in pt
 			for(j = 0; j < 12; ++j){ // 11 chars per line
