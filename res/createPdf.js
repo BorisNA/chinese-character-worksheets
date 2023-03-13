@@ -4,8 +4,9 @@
 *	numberOfGrayscaleSigns : int
 *	writePinyin, useGridlines, writeName : Booleans
 *	docTitle, filename, wayOfRetrieval : Strings
+*	groupBy: int
 */
-function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval){
+function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, groupBy ){
 	// make filename "filesystem-secure"
 		filename = filename.replace(/[^a-z0-9öäüß\s\-\_\u4E00-\u9FFF]/gi, '');
 		filename = filename == "" ? "my-chinese-exercise" : filename;
@@ -29,11 +30,12 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 		var xUpLeft = 14;								// x position of the first character line on a page = left indent
 		var charLineHeight = 17;						// height of a character line
 		var charCellWidth = 17;							// width of a character cell
-		var yUpLeft = 25;								// y position of the first character line on a page = top indent + distance between character lines
-		var charLineDistance = charLineHeight + 7.4;	// distance between the UPPER strokes of the char lines
+		var yUpLeft = 18;								// y position of the first character line on a page = top indent + distance between character lines
+		var charLineDistance = charLineHeight + 0.0;	// distance between the UPPER strokes of the char lines
+		var charLineDistanceEx = 2.0;
 		var thisLineYUpLeft;
 		var curPage = 1;		// current page
-		var charsPerPage = 11;
+		var charsPerPage = 14;
 		var imgProp;
 		var totalPages = Math.ceil(characters.length/charsPerPage); // total number of pages (pre-computed)
 		for(i = 0; i < characters.length; ++i){
@@ -43,7 +45,7 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 					curPage++;
 				}
 				// line on top of the page
-				doc.line(xUpLeft, 17, 201, 17);
+				doc.line(xUpLeft, 15, 201, 15);
 				// write "姓名：" if the user wanted it
 				if(writeName){
 					doc.setFont('AR PL UKai CN');
@@ -53,26 +55,26 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 				// write doc title
 					doc.setFont('AR PL UKai CN');
 					doc.setFontSize(14); //in pt
-					doc.text(docTitle, 105, 16, 'center'); // A4_width/2 = 210 mm/2 = 105
+					doc.text(docTitle, 105, 13, 'center'); // A4_width/2 = 210 mm/2 = 105
 				// write page number
 					doc.setFont('Noto Sans');
 					doc.setFontSize(10); //in pt
 					//doc.text("第" + curPage + "页，共" + totalPages + "页", 201, 16, 'right'); // 201 is 210-rightIndent
-					doc.text(curPage + "/" + totalPages, 201, 16, 'right'); // 201 is 210-rightIndent
-				// copyright on the bottom
+					doc.text(curPage + "/" + totalPages, 201, 13, 'right'); // 201 is 210-rightIndent
+ 				// copyright on the bottom
 					doc.setFont('Noto Sans');
 					doc.setFontSize(10); //in pt
 					var copyrightText = 'Create your own Chinese worksheets for free: www.is.gd/ch_ex';
 					var copyrightTextWidth = doc.getTextWidth(copyrightText) + 2;
 					var copyrightTextHeight = doc.internal.getLineHeight()/doc.internal.scaleFactor + 1;
-					doc.text(copyrightText, 105, charLineDistance * (charsPerPage+1) - 3, 'center');
+					doc.text(copyrightText, 105, yUpLeft + charLineDistance * (charsPerPage+1) + Math.floor( charsPerPage/2 ) * charLineDistanceEx, 'center');
 					doc.link(105 - copyrightTextWidth/2,
-						charLineDistance * (charsPerPage+1) - 1.5 - copyrightTextHeight,
+						yUpLeft + charLineDistance * (charsPerPage+1) + Math.floor( charsPerPage/2 ) * charLineDistanceEx - copyrightTextHeight,
 						copyrightTextWidth,
 						copyrightTextHeight,
 						{ url: 'https://is.gd/ch_ex'});
 			}
-			thisLineYUpLeft = yUpLeft + (i%charsPerPage) * charLineDistance;
+			thisLineYUpLeft = yUpLeft + (i%charsPerPage) * charLineDistance + ( Math.floor((i%charsPerPage)/groupBy) * charLineDistanceEx );
 			// paste hanzi-write Stroke Order SVGs
 				if(pasteSoImages){
 					// this is the div which contains the stroke order of the character "characters[i]"

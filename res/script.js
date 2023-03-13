@@ -46,6 +46,23 @@ $(document).ready(function(){
 		// fetch all "character stroke order picture urls"
 		// let the user know
 			$("#substatus").html("Fetching stroke order images from Hanzi Writer (<span class='amountDone'>0</span>/" + characters.length + ")");
+
+		var groupBy = 1;
+		if( $("#extra-line").is(':checked') )
+		{
+			// expando
+			for( i = characters.length - 1; i >= 0; i-- )
+			{
+				characters[i*2+1] = '';
+				characters[i*2]   = characters[i];
+			}
+			groupBy = 2;
+		}
+		else
+		{
+			groupBy = 1;
+		}
+
 		var strokeOrderDrawingCallbacksRemaining = characters.length; // let's count how many (hidden) drawings of character stroke orders on the page are still missing
 		for (var i = 0; i < characters.length; i++) {
 			// create the container for the stroke order of the current character
@@ -64,11 +81,11 @@ $(document).ready(function(){
 							getPinyin(charactersString, function(r){
 								charPinyin = r.split(" "); // save pinyin
 								// create the pdf now
-								createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval);
+								createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, groupBy);
 							});
 						} else {
 							// create the pdf now
-							createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval);
+							createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, writePinyin, useGridlines, writeName, filename, charPinyin, wayOfRetrieval, groupBy);
 						}
 					}
 				}
