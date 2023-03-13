@@ -90,6 +90,7 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 				}
 			// gridlines - part 1
 				if(useGridlines){
+					doc.setLineDash( [1, 1] );
 					doc.setDrawColor("D0D0D0");
 					// horizontal lines for all of the characters in the character line
 					doc.line(	xUpLeft,
@@ -97,6 +98,7 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 								xUpLeft + 11 * charCellWidth,
 								thisLineYUpLeft + 0.5 * charLineHeight);
 					doc.setDrawColor("000000");
+				doc.setLineDash( );
 				}
 			// write pinyin
 				if(writePinyin){
@@ -111,6 +113,7 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 				// gridlines - part 2
 					if(useGridlines && j < 11){
 						doc.setDrawColor("D0D0D0");
+						doc.setLineDash( [1, 1] );
 						// vertical line per character
 						doc.line(
 							xUpLeft + (j+0.5) * charCellWidth,	// x1
@@ -132,6 +135,7 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 								xUpLeft + (j+1) * charCellWidth,	// x2
 								thisLineYUpLeft);					// y2
 							doc.setLineCap("projecting");
+						doc.setLineDash();
 						doc.setDrawColor("000000");
 					}
 				// vertical lines
