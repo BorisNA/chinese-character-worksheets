@@ -12,7 +12,7 @@ function createPdf(docTitle, characters, numberOfGrayscaleSigns, pasteSoImages, 
 	// notify user
 		$("#substatus").html("Starting to create your PDF");
 	// new jsPDF-doc
-		var doc = new jsPDF();
+		var doc = new jspdf.jsPDF();
 	// import font to jsPDF
 		$("#substatus").html("Adding Chinese font");
 		doc.addFileToVFS('AR PL UKai CN.ttf', ArPlUkaiCnBase64);
